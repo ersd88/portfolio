@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBANFIT — Магазин одягу</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+        --dark: #161616;
+        --dark2: #232323;
+        --orange: #FF6A00;
+        --orange-light: #FF8A3D;
+        --text: #333;
+        --bg: #FAFAFA;
+        --gray: #888;
+    }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+    a { text-decoration:none; color:inherit; }
+
+    /* Header */
+    header {
+        background: var(--dark);
+        color: white;
+        position: sticky;
+        top:0;
+        z-index: 200;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+    }
+    .header-inner {
+        max-width: 1200px;
+        margin:0 auto;
+        padding: 1rem 2rem;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+    .logo {
+        font-size:1.6rem;
+        font-weight:800;
+        letter-spacing:1px;
+    }
+    .logo span { color: var(--orange); }
+    nav { display:flex; gap:2rem; }
+    nav a { font-size:0.95rem; transition:color .2s; }
+    nav a:hover { color: var(--orange); }
+    .cart-btn {
+        background: var(--orange);
+        color:#fff;
+        border:none;
+        padding:0.6rem 1.2rem;
+        border-radius:30px;
+        cursor:pointer;
+        font-weight:600;
+        display:flex;
+        align-items:center;
+        gap:0.5rem;
+        transition:background .2s;
+    }
+    .cart-btn:hover { background: var(--orange-light); }
+    .cart-count {
+        background:#fff;
+        color:var(--dark);
+        border-radius:50%;
+        width:22px;height:22px;
+        display:flex;align-items:center;justify-content:center;
+        font-size:0.8rem;
+        font-weight:800;
+    }
+
+    /* Hero */
+    .hero {
+        background: linear-gradient(135deg, var(--dark) 0%, #2b2b2b 100%);
+        color:#fff;
+        text-align:center;
+        padding:6rem 2rem;
+    }
+    .hero h1 {
+        font-size:3rem;
+        margin-bottom:1rem;
+    }
+    .hero span { color: var(--orange); }
+    .hero p {
+        color:#ccc;
+        font-size:1.15rem;
+        max-width:600px;
+        margin:0 auto 2rem;
+    }
+    .hero-btn {
+        background: var(--orange);
+        color:#fff;
+        padding:0.9rem 2.2rem;
+        border-radius:30px;
+        font-weight:700;
+        display:inline-block;
+        transition: transform .2s;
+    }
+    .hero-btn:hover { transform: scale(1.05); }
+
+    /* Filters */
+    .filters {
+        max-width:1200px;
+        margin:0 auto;
+        padding:3rem 2rem 1rem;
+        display:flex;
+        gap:1rem;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    .filter-btn {
+        background:#fff;
+        border:2px solid #ddd;
+        padding:0.6rem 1.5rem;
+        border-radius:30px;
+        cursor:pointer;
+        font-weight:600;
+        font-size:0.9rem;
+        transition:all .2s;
+        color:var(--text);
+    }
+    .filter-btn:hover { border-color: var(--orange); }
+    .filter-btn.active {
+        background:var(--dark);
+        border-color:var(--dark);
+        color:#fff;
+    }
+
+    /* Products */
+    .products {
+        max-width:1200px;
+        margin:0 auto;
+        padding:2rem;
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+        gap:2rem;
+    }
+    .product-card {
+        background:#fff;
+        border-radius:14px;
+        overflow:hidden;
+        box-shadow:0 4px 15px rgba(0,0,0,0.06);
+        transition: transform .25s, box-shadow .25s;
+    }
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow:0 12px 30px rgba(0,0,0,0.12);
+    }
+    .product-image {
+        height:220px;
+        background: linear-gradient(135deg, var(--dark) 0%, #333 100%);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:4rem;
+        position:relative;
+    }
+    .product-badge {
+        position:absolute;
+        top:12px; left:12px;
+        background:var(--orange);
+        color:#fff;
+        font-size:0.7rem;
+        font-weight:700;
+        padding:0.3rem 0.7rem;
+        border-radius:20px;
+        text-transform:uppercase;
+    }
+    .product-info { padding:1.3rem; }
+    .product-category {
+        font-size:0.75rem;
+        color:var(--orange);
+        font-weight:700;
+        text-transform:uppercase;
+        letter-spacing:0.5px;
+    }
+    .product-info h3 {
+        margin:0.4rem 0 0.5rem;
+        font-size:1.15rem;
+        color:var(--dark);
+    }
+    .product-price {
+        font-size:1.3rem;
+        font-weight:800;
+        color:var(--dark);
+        margin-bottom:1rem;
+    }
+    .product-price span {
+        font-size:0.9rem;
+        color:var(--gray);
+        text-decoration:line-through;
+        font-weight:400;
+        margin-left:0.5rem;
+    }
+    .add-to-cart {
+        width:100%;
+        background:var(--dark);
+        color:#fff;
+        border:none;
+        padding:0.75rem;
+        border-radius:8px;
+        cursor:pointer;
+        font-weight:700;
+        transition:background .2s;
+    }
+    .add-to-cart:hover { background: var(--orange); }
+
+    /* Cart Sidebar */
+    .cart-overlay {
+        position:fixed;
+        top:0;left:0;right:0;bottom:0;
+        background:rgba(0,0,0,0.5);
+        display:none;
+        z-index:300;
+    }
+    .cart-overlay.active { display:block; }
+    .cart-sidebar {
+        position:fixed;
+        top:0; right:-420px;
+        width:400px;
+        max-width:90vw;
+        height:100%;
+        background:#fff;
+        z-index:301;
+        transition:right .3s;
+        display:flex;
+        flex-direction:column;
+        box-shadow:-5px 0 30px rgba(0,0,0,0.2);
+    }
+    .cart-sidebar.active { right:0; }
+    .cart-header {
+        background:var(--dark);
+        color:#fff;
+        padding:1.5rem;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+    .cart-header h2 { font-size:1.3rem; }
+    .close-cart {
+        background:none;
+        border:none;
+        color:#fff;
+        font-size:1.5rem;
+        cursor:pointer;
+    }
+    .cart-items {
+        flex:1;
+        overflow-y:auto;
+        padding:1rem 1.5rem;
+    }
+    .cart-item {
+        display:flex;
+        gap:1rem;
+        padding:1rem 0;
+        border-bottom:1px solid #eee;
+        align-items:center;
+    }
+    .cart-item-icon {
+        width:60px;height:60px;
+        background:var(--dark);
+        border-radius:8px;
+        display:flex;align-items:center;justify-content:center;
+        font-size:1.8rem;
+        flex-shrink:0;
+    }
+    .cart-item-info { flex:1; }
+    .cart-item-info h4 { font-size:0.95rem; margin-bottom:0.2rem; }
+    .cart-item-price { color:var(--orange); font-weight:700; }
+    .remove-item {
+        background:none;
+        border:none;
+        color:#999;
+        cursor:pointer;
+        font-size:1.2rem;
+    }
+    .remove-item:hover { color:#e74c3c; }
+    .empty-cart {
+        text-align:center;
+        color:var(--gray);
+        padding:3rem 1rem;
+    }
+    .cart-footer {
+        padding:1.5rem;
+        border-top:2px solid #eee;
+    }
+    .cart-total {
+        display:flex;
+        justify-content:space-between;
+        font-size:1.2rem;
+        font-weight:800;
+        margin-bottom:1rem;
+        color:var(--dark);
+    }
+    .checkout-btn {
+        width:100%;
+        background:var(--orange);
+        color:#fff;
+        border:none;
+        padding:1rem;
+        border-radius:8px;
+        font-weight:700;
+        font-size:1rem;
+        cursor:pointer;
+        transition:background .2s;
+    }
+    .checkout-btn:hover { background:var(--orange-light); }
+
+    /* Features */
+    .features {
+        background:var(--dark);
+        color:#fff;
+        padding:3.5rem 2rem;
+        margin-top:3rem;
+    }
+    .features-grid {
+        max-width:1200px;
+        margin:0 auto;
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+        gap:2rem;
+        text-align:center;
+    }
+    .feature-item h3 { color:var(--orange); font-size:1.8rem; margin-bottom:0.4rem; }
+    .feature-item p { color:#bbb; font-size:0.9rem; }
+
+    /* Footer */
+    footer {
+        background:#111;
+        color:#888;
+        text-align:center;
+        padding:2rem;
+        font-size:0.9rem;
+    }
+
+    @media (max-width:768px) {
+        nav { display:none; }
+        .hero h1 { font-size:2rem; }
+        .header-inner { padding:1rem; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">URBAN<span>FIT</span></div>
+        <nav>
+            <a href="#products">Каталог</a>
+            <a href="#features">Про нас</a>
+            <a href="#footer">Контакти</a>
+        </nav>
+        <button class="cart-btn" onclick="toggleCart()">
+            🛒 Кошик <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Стиль, що каже <span>все</span> за тебе</h1>
+    <p>Сучасний одяг для тих, хто не боїться виділятись. Нова колекція вже в наявності.</p>
+    <a href="#products" class="hero-btn">Дивитись каталог</a>
+</section>
+
+<div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">Всі товари</button>
+    <button class="filter-btn" data-filter="men">Чоловіче</button>
+    <button class="filter-btn" data-filter="women">Жіноче</button>
+    <button class="filter-btn" data-filter="accessories">Аксесуари</button>
+</div>
+
+<div class="products" id="products"></div>
+
+<section class="features" id="features">
+    <div class="features-grid">
+        <div class="feature-item">
+            <h3>🚚 Безкоштовна доставка</h3>
+            <p>При замовленні від 1500 грн по всій Україні</p>
+        </div>
+        <div class="feature-item">
+            <h3>↩️ 30 днів на повернення</h3>
+            <p>Не підійшло? Повернемо гроші без питань</p>
+        </div>
+        <div class="feature-item">
+            <h3>🔒 Безпечна оплата</h3>
+            <p>Карткою, готівкою або накладеним платежем</p>
+        </div>
+        <div class="feature-item">
+            <h3>💬 Підтримка 24/7</h3>
+            <p>Завжди на зв'язку в чаті та телефоном</p>
+        </div>
+    </div>
+</section>
+
+<footer id="footer">
+    <p>&copy; 2026 URBANFIT. Всі права захищені.</p>
+</footer>
+
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h2>Твій кошик</h2>
+        <button class="close-cart" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+        <div class="cart-total">
+            <span>Разом:</span>
+            <span id="cartTotal">0 грн</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()">Оформити замовлення</button>
+    </div>
+</div>
+
+<script>
+const products = [
+    { id:1, name:"Оверсайз худі 'Shadow'", price:1450, oldPrice:1800, category:"men", icon:"🧥", badge:"Хіт" },
+    { id:2, name:"Джинси карго чорні", price:1690, oldPrice:null, category:"men", icon:"👖", badge:null },
+    { id:3, name:"Футболка 'Street Basic'", price:590, oldPrice:750, category:"men", icon:"👕", badge:"Знижка" },
+    { id:4, name:"Сукня 'Midnight' міні", price:1290, oldPrice:null, category:"women", icon:"👗", badge:"Новинка" },
+    { id:5, name:"Кроп-топ оранжевий", price:490, oldPrice:null, category:"women", icon:"👚", badge:null },
+    { id:6, name:"Спідниця плісе чорна", price:990, oldPrice:1200, category:"women", icon:"🩱", badge:"Знижка" },
+    { id:7, name:"Кепка 'Urban Flame'", price:390, oldPrice:null, category:"accessories", icon:"🧢", badge:"Новинка" },
+    { id:8, name:"Сумка-месенджер чорна", price:1150, oldPrice:null, category:"accessories", icon:"🎒", badge:null },
+    { id:9, name:"Кросівки 'Blaze' помаранчеві", price:2290, oldPrice:2790, category:"accessories", icon:"👟", badge:"Хіт" }
+];
+
+let cart = [];
+
+function renderProducts(filter = 'all') {
+    const container = document.getElementById('products');
+    const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    container.innerHTML = filtered.map(p => `
+        <div class="product-card">
+            <div class="product-image">
+                ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+                ${p.icon}
+            </div>
+            <div class="product-info">
+                <div class="product-category">${categoryName(p.category)}</div>
+                <h3>${p.name}</h3>
+                <div class="product-price">${p.price} грн ${p.oldPrice ? `<span>${p.oldPrice} грн</span>` : ''}</div>
+                <button class="add-to-cart" onclick="addToCart(${p.id})">Додати в кошик</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function categoryName(cat) {
+    return { men:"Чоловіче", women:"Жіноче", accessories:"Аксесуари" }[cat] || cat;
+}
+
+document.getElementById('filters').addEventListener('click', (e) => {
+    if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        renderProducts(e.target.dataset.filter);
+    }
+});
+
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ ...product, qty: 1 });
+    }
+    renderCart();
+    toggleCart(true);
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    renderCart();
+}
+
+function renderCart() {
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartTotalEl = document.getElementById('cartTotal');
+
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    cartCountEl.textContent = totalQty;
+
+    if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<div class="empty-cart">Кошик порожній 🛍️<br>Додай щось стильне!</div>';
+    } else {
+        cartItemsEl.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-icon">${item.icon}</div>
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <div class="cart-item-price">${item.price} грн × ${item.qty}</div>
+                </div>
+                <button class="remove-item" onclick="removeFromCart(${item.id})">&times;</button>
+            </div>
+        `).join('');
+    }
+
+    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    cartTotalEl.textContent = total + ' грн';
+}
+
+function toggleCart(forceOpen) {
+    const sidebar = document.getElementById('cartSidebar');
+    const overlay = document.getElementById('cartOverlay');
+    const shouldOpen = forceOpen === true ? true : !sidebar.classList.contains('active');
+    sidebar.classList.toggle('active', shouldOpen);
+    overlay.classList.toggle('active', shouldOpen);
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert('Кошик порожній!');
+        return;
+    }
+    alert('Дякуємо за замовлення! Це демо-версія магазину для портфоліо — реальна оплата тут не підключена.');
+}
+
+renderProducts();
+renderCart();
+</script>
+
+</body>
+</html>
